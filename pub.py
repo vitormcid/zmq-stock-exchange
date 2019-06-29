@@ -8,14 +8,19 @@ from random import randint
 # ZeroMQ Context
 context = zmq.Context()
 
-stock_list = {"google":50, "apple":50, "amazon":50}
+stock_list = {"google":50, "apple":50, "amazon":50, "ICBC":50,    "Bank of America": 50, 
+			  "Royal Dutch Shell":50, "Wells Fargo":50, "ExxonMobil":50, "Citigroup":50,
+			  "Toyota Motor": 50, "microsoft":50, "Alphabet":50,  "Volkswagen Group":50,
+			  "Chevron":50, "HSBC Holdings": 50,"intel":50, "Comcast":50, "Softbank":50,
+			  "RBC":50, "Nestle": 50,
+			 }
 
 def update_stock_price():
 	for i in stock_list:
 		# the stock price can vary by up to 10%
 		rand_percentage = randint(-100,100)/1000
 		old_price = stock_list[i]
-		stock_list[i] = old_price + old_price*rand_percentage 
+		stock_list[i] = round(old_price + old_price*rand_percentage,3)
 
 # Define the socket using the "Context"
 sock = context.socket(zmq.PUB)
@@ -29,18 +34,10 @@ while True:
 
     for i in stock_list:
     	update_stock_price()
-    	message = "{company}-{stock_price}".format(company= i, stock_price = stock_list[i])
+    	message = "{company}: ${stock_price}".format(company= i, stock_price = stock_list[i])
     	sock.send(message)
     	id += 1
 
 
-    # Message [prefix][message]
-    # message = "1-Update! >> #{id} >> {time}".format(id=id, time=now)
-    # sock.send(message)
-
-    # # Message [prefix][message]
-    # message = "2-hello >> #{id} >> {time}".format(id=id, time=now) 
-    # sock.send(message)
-
-    
+   
 
