@@ -26,17 +26,14 @@ def update_stock_price():
 sock = context.socket(zmq.PUB)
 sock.bind("tcp://127.0.0.1:5680")
 
-id = 0
-
 while True:
     time.sleep(1)
-    id, now = id+1, time.ctime()
-
+    time.ctime()
     for i in stock_list:
     	update_stock_price()
     	message = "{company}: ${stock_price}".format(company= i, stock_price = stock_list[i])
     	sock.send(message)
-    	id += 1
+    	
 
 
    
